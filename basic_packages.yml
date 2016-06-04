@@ -1,0 +1,38 @@
+- hosts: lhs2
+  vars:
+   - userName: libesz
+   - userEmail: huszty.gergo@digitaltrip.hu
+  tasks:
+   - name: Install VIM
+     become: yes
+     apt: pkg=vim state=installed update_cache=true
+     register: vimInstalled
+
+   - name: Apply .vimrc
+     when: vimInstalled|success
+     become_user: "{{userName}}"
+     copy: dest=~/.vimrc src=./.vimrc owner={{userName}} group={{userName}}
+
+   - name: Install htop
+     become: yes
+     apt: pkg=htop state=installed update_cache=true
+
+   - name: Install mc
+     become: yes
+     apt: pkg=mc state=installed update_cache=true
+
+   - name: Install zsh
+     become: yes
+     apt: pkg=zsh state=installed update_cache=true
+
+   - name: Install git
+     apt: pkg=git state=installed update_cache=true
+     become: yes
+     register: gitInstalled
+
+   - name: Configure git
+     when: gitInstalled|success
+     become_user: "{{userName}}"
+     shell: git config --global user.name {{userName}}; \
+            git config --global user.email {{userEmail}}
+
