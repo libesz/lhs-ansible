@@ -11,7 +11,7 @@
    - name: Apply .vimrc
      when: vimInstalled|success
      become_user: "{{userName}}"
-     copy: dest=~/.vimrc src=./.vimrc owner={{userName}} group={{userName}}
+     copy: dest=~/.vimrc src=./to_copy/.vimrc owner={{userName}} group={{userName}}
 
    - name: Install htop
      become: yes
@@ -24,6 +24,13 @@
    - name: Install zsh
      become: yes
      apt: pkg=zsh state=installed update_cache=true
+     register: zshInstalled
+
+   - name: Change shell to zsh
+     when: zshInstalled
+     register: changedShellToZsh
+     become: yes
+     shell: chsh -s /bin/zsh {{userName}}
 
    - name: Install git
      apt: pkg=git state=installed update_cache=true
@@ -36,3 +43,7 @@
      shell: git config --global user.name {{userName}}; \
             git config --global user.email {{userEmail}}
 
+   - name: Get oh-my-zsh
+     when: (gitInstalled|success and changedShellToZsh|success)
+     become_user: "{{userName}}"
+     shell: sh -c "$(wget https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)"
