@@ -17,6 +17,10 @@
      become: yes
      apt: pkg=htop state=installed update_cache=true
 
+   - name: Install aptitude
+     become: yes
+     apt: pkg=aptitude state=installed update_cache=true
+
    - name: Install mc
      become: yes
      apt: pkg=mc state=installed update_cache=true
