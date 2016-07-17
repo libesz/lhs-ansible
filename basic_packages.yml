@@ -18,18 +18,13 @@
      become_user: "{{userName}}"
      copy: dest=~/.vimrc src=./to_copy/.vimrc owner={{userName}} group={{userName}}
 
-   - name: Get current shell
-     shell: 'cat /etc/passwd | grep {{userName}} | cut -d: -f 7'
-     register: current_shell
-
    - name: Check oh-my-zsh
      stat: path=/home{{userName}}/.oh-my-zsh
      register: oh_my_zsh_installed
 
    - name: Change shell to zsh
      become: yes
-     when: current_shell.stdout != '/bin/zsh'
-     shell: chsh -s /bin/zsh {{userName}}
+     user: name={{userName}} shell=/bin/zsh
 
    - name: Configure git email
      become_user: "{{userName}}"
