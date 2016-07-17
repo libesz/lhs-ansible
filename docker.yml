@@ -1,0 +1,37 @@
+- hosts: lhs2
+  vars:
+   - userName: libesz
+  tasks:
+   - name: Install docker related packages from official repo
+     become: yes
+     action: apt pkg={{item}} state=installed update_cache=true
+     with_items:
+       - apt-transport-https
+       - ca-certificates
+       - python-pip
+
+   - name: Add key for docker apt repo
+     become: yes
+     apt_key: keyserver=hkp://p80.pool.sks-keyservers.net:80 id=58118E89F3A912897C070ADBF76221572C52609D
+
+   - name: Add docker apt repo
+     become: yes
+     copy: dest=/etc/apt/sources.list.d/docker.list src=./to_copy/docker.list
+
+   - name: Install docker packages from docker repo
+     become: yes
+     action: apt pkg={{item}} state=installed update_cache=true
+     with_items:
+       - docker-engine
+
+   - name: Add user to docker group
+     become: yes
+     user: name={{userName}} groups=docker
+
+   - name: Install docker-compose pip module
+     become: yes
+     pip: name=docker-compose state=latest
+
+   - name: Create minidlna service
+     docker_service:
+       project_src: docker/minidlna
