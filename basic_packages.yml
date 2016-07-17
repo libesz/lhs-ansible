@@ -1,40 +1,36 @@
-- hosts: lhs2
-  vars:
-   - userName: libesz
-   - userEmail: huszty.gergo@digitaltrip.hu
-  tasks:
-   - name: Install basic backages
-     become: yes
-     action: apt pkg={{item}} state=installed update_cache=true
-     with_items:
-       - vim
-       - htop
-       - aptitude
-       - mc
-       - git
-       - zsh
+- name: Install basic backages
+  become: yes
+  action: apt pkg={{item}} state=installed update_cache=true
+  with_items:
+    - vim
+    - htop
+    - aptitude
+    - mc
+    - git
+    - zsh
 
-   - name: Apply .vimrc
-     become_user: "{{userName}}"
-     copy: dest=~/.vimrc src=./to_copy/.vimrc owner={{userName}} group={{userName}}
+- name: Apply .vimrc
+  become_user: "{{userName}}"
+  copy: dest=~/.vimrc src=./to_copy/.vimrc owner={{userName}} group={{userName}}
 
-   - name: Check oh-my-zsh
-     stat: path=/home{{userName}}/.oh-my-zsh
-     register: oh_my_zsh_installed
+- name: Change shell to zsh
+  become: yes
+  register: shellChanged
+  user: name={{userName}} shell=/bin/zsh
 
-   - name: Change shell to zsh
-     become: yes
-     user: name={{userName}} shell=/bin/zsh
+- name: Configure git email
+  become_user: "{{userName}}"
+  git_config: name=user.email value={{userEmail}} scope=global
 
-   - name: Configure git email
-     become_user: "{{userName}}"
-     git_config: name=user.email value={{userEmail}} scope=global
+- name: Configure git user
+  become_user: "{{userName}}"
+  git_config: name=user.name value={{userName}} scope=global
 
-   - name: Configure git user
-     become_user: "{{userName}}"
-     git_config: name=user.name value={{userName}} scope=global
+- name: Configure git colors
+  become_user: "{{userName}}"
+  git_config: name=color.ui value=auto scope=global
 
-   - name: Get oh-my-zsh
-     become_user: "{{userName}}"
-     when: oh_my_zsh_installed.stat.exists != False
-     shell: sh -c "$(wget https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)"
+- name: Get oh-my-zsh
+  become_user: "{{userName}}"
+  when: shellChanged|success
+  shell: sh -c "$(wget https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)"
