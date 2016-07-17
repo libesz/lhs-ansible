@@ -8,31 +8,28 @@
        - php5
        - php5-fpm
        - php5-cgi
-     register: webServiceInstalled
 
    - name: Configure nginx
-     when: webServiceInstalled|success
      become: yes
      copy: dest=/etc/nginx/nginx.conf src=./to_copy/nginx.conf
-     register: nginxConfigured
 
    - name: Configure php5-fpm
-     when: webServiceInstalled|success
      become: yes
      register: php5FpmConfigured
      replace: dest=/etc/php5/fpm/pool.d/www.conf regexp='(\s+)listen = /var/run/php5-fpm.sock$' replace='\1listen = 127.0.0.1:9000' backup=yes
 
    - name: Copy test php page
-     when: php5FpmConfigured|success
      become: yes
      copy: dest=/var/www/html/test.php src=./to_copy/test.php
+     notify:
+       - Start and enable php5-fpm
+       - Start and enable nginx
 
+  handlers:
    - name: Start and enable php5-fpm
-     when: php5FpmConfigured|success
      become: yes
      service: name=php5-fpm state=restarted enabled=yes
 
    - name: Start and enable nginx
-     when: nginxConfigured|success
      become: yes
      service: name=nginx state=restarted enabled=yes

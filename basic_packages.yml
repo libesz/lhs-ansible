@@ -3,51 +3,43 @@
    - userName: libesz
    - userEmail: huszty.gergo@digitaltrip.hu
   tasks:
-   - name: Install VIM
+   - name: Install basic backages
      become: yes
-     apt: pkg=vim state=installed update_cache=true
-     register: vimInstalled
+     action: apt pkg={{item}} state=installed update_cache=true
+     with_items:
+       - vim
+       - htop
+       - aptitude
+       - mc
+       - git
+       - zsh
 
    - name: Apply .vimrc
-     when: vimInstalled|success
      become_user: "{{userName}}"
      copy: dest=~/.vimrc src=./to_copy/.vimrc owner={{userName}} group={{userName}}
 
-   - name: Install htop
-     become: yes
-     apt: pkg=htop state=installed update_cache=true
+   - name: Get current shell
+     shell: 'cat /etc/passwd | grep {{userName}} | cut -d: -f 7'
+     register: current_shell
 
-   - name: Install aptitude
-     become: yes
-     apt: pkg=aptitude state=installed update_cache=true
-
-   - name: Install mc
-     become: yes
-     apt: pkg=mc state=installed update_cache=true
-
-   - name: Install zsh
-     become: yes
-     apt: pkg=zsh state=installed update_cache=true
-     register: zshInstalled
+   - name: Check oh-my-zsh
+     stat: path=/home{{userName}}/.oh-my-zsh
+     register: oh_my_zsh_installed
 
    - name: Change shell to zsh
-     when: zshInstalled
-     register: changedShellToZsh
      become: yes
+     when: current_shell.stdout != '/bin/zsh'
      shell: chsh -s /bin/zsh {{userName}}
 
-   - name: Install git
-     apt: pkg=git state=installed update_cache=true
-     become: yes
-     register: gitInstalled
-
-   - name: Configure git
-     when: gitInstalled|success
+   - name: Configure git email
      become_user: "{{userName}}"
-     shell: git config --global user.name {{userName}}; \
-            git config --global user.email {{userEmail}}
+     git_config: name=user.email value={{userEmail}} scope=global
+
+   - name: Configure git user
+     become_user: "{{userName}}"
+     git_config: name=user.name value={{userName}} scope=global
 
    - name: Get oh-my-zsh
-     when: (gitInstalled|success and changedShellToZsh|success)
      become_user: "{{userName}}"
+     when: oh_my_zsh_installed.stat.exists != False
      shell: sh -c "$(wget https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)"
