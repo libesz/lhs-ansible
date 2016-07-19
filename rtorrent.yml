@@ -1,0 +1,15 @@
+- name: Create downloads directory
+  file: path=~/downloads state=directory
+
+- name: Create password auth for webui
+  shell: echo "{{rtorrentUser}}:$(openssl passwd -crypt {{rtorrentPass}})" > ~/downloads/.htpasswd
+
+- name: Create rtorrent docker-compose directory
+  file: path=~/docker/rtorrent state=directory
+
+- name: Copy rtorrent docker-compose yml
+  copy: src=docker/rtorrent/docker-compose.yml dest=~/docker/rtorrent/docker-compose.yml
+
+- name: Create rtorrent service
+  docker_service:
+    project_src: docker/rtorrent

@@ -1,0 +1,10 @@
+minidlna:
+  image: vimagick/minidlna
+  ports:
+    - "0.0.0.0:1900:1900/udp"
+    - "0.0.0.0:8200:8200/tcp"
+  command: minidlnad -d
+  volumes:
+    - ~/downloads:/opt
+  container_name: minidlna
+  restart: always
