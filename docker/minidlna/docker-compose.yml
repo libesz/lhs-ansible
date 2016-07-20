@@ -3,6 +3,7 @@ minidlna:
   ports:
     - "0.0.0.0:1900:1900/udp"
     - "0.0.0.0:8200:8200/tcp"
+  net: "host"
   command: minidlnad -d
   volumes:
     - ~/downloads:/opt
