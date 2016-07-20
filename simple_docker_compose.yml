@@ -1,0 +1,9 @@
+- name: Create {{serviceName}} docker-compose directory
+  file: path=~/docker/{{serviceName}} state=directory
+
+- name: Copy {{serviceName}} docker-compose yml
+  copy: src=docker/{{serviceName}}/docker-compose.yml dest=~/docker/{{serviceName}}/docker-compose.yml
+
+- name: Create {{serviceName}} service
+  docker_service:
+    project_src: docker/{{serviceName}}
