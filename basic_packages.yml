@@ -30,6 +30,13 @@
   become_user: "{{userName}}"
   git_config: name=color.ui value=auto scope=global
 
+- name: Kill open ssh sessions
+  shell: sleep 1; pkill -u {{userName}} sshd
+  async: 3
+  poll: 2
+  when: shellChanged|changed
+  failed_when: false
+
 - name: Get oh-my-zsh
   become_user: "{{userName}}"
   when: shellChanged|changed

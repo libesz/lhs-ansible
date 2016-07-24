@@ -23,6 +23,14 @@
 - name: Add user to docker group
   become: yes
   user: name={{userName}} groups=docker
+  register: userAddedToDockerGroup
+
+- name: Kill open ssh sessions
+  shell: sleep 1; pkill -u {{userName}} sshd
+  async: 3
+  poll: 2
+  when: userAddedToDockerGroup|changed
+  failed_when: false
 
 - name: Install docker-compose pip module
   become: yes
