@@ -1,6 +1,3 @@
-- name: Create downloads directory
-  file: path=~/downloads state=directory
-
 - name: Create password auth for webui
   shell: echo "{{rtorrentUser}}:$(openssl passwd -crypt {{rtorrentPass}})" > ~/downloads/.htpasswd
 
