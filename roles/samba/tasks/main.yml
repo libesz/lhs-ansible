@@ -4,8 +4,8 @@
 - name: Copy samba config
   copy: src=smb.conf dest=~/docker/samba/
 
-- name: Copy docker compose project
-  copy: src=docker-compose.yml dest=~/docker/samba/
+- name: Create docker compose project
+  template: src=docker-compose.yml.j2 dest=~/docker/samba/docker-compose.yml
 
 - name: Create samba service
   docker_service:

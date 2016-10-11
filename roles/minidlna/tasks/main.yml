@@ -1,8 +1,8 @@
 - name: Create minidlna docker-compose directory
   file: path=~/docker/minidlna state=directory
 
-- name: Copy minidlna docker-compose yml
-  copy: src=docker-compose.yml dest=~/docker/minidlna/docker-compose.yml
+- name: Create minidlna docker-compose yml
+  template: src=docker-compose.yml.j2 dest=~/docker/minidlna/docker-compose.yml
 
 - name: Create minidlna service
   docker_service:

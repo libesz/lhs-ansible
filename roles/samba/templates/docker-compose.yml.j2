@@ -4,7 +4,7 @@ samba:
     # You must provide a Samba config file
     - ./smb.conf:/config/smb.conf
     # Shares
-    - /home/libesz/downloads:/share
+    - {{downloadLocation}}:/share
   ports:
     - "137:137/udp"
     - "138:138/udp"

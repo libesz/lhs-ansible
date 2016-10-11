@@ -6,6 +6,6 @@ minidlna:
   net: "host"
   command: minidlnad -d
   volumes:
-    - ~/downloads:/opt
+    - {{downloadLocation}}:/opt
   container_name: minidlna
   restart: always
