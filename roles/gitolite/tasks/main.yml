@@ -1,0 +1,9 @@
+- name: Create gitolite docker-compose directory
+  file: path=~/docker/gitolite state=directory
+
+- name: Copy gitolite docker-compose yml
+  template: src=docker-compose.yml.j2 dest=~/docker/gitolite/docker-compose.yml
+
+- name: Create gitolite service
+  docker_service:
+    project_src: docker/gitolite

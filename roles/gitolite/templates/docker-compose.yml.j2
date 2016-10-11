@@ -1,0 +1,10 @@
+gitolite:
+  image: ekapusta/alpine-gitolite
+  ports:
+    - "2222:22"
+  volumes:
+    - ~/repositories:/home/gitolite/repositories
+  container_name: gitolite
+  restart: always
+  environment:
+    - GITOLITE_ADMIN_KEY={{pubKeyForGitolite}}
