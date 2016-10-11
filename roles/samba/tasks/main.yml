@@ -1,0 +1,12 @@
+- name: Create samba docker-compose directory
+  file: path=~/docker/samba state=directory
+
+- name: Copy samba config
+  copy: src=smb.conf dest=~/docker/samba/
+
+- name: Copy docker compose project
+  copy: src=docker-compose.yml dest=~/docker/samba/
+
+- name: Create samba service
+  docker_service:
+    project_src: docker/samba

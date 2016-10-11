@@ -12,7 +12,7 @@
 
 - name: Add docker apt repo
   become: yes
-  copy: dest=/etc/apt/sources.list.d/docker.list src=./to_copy/docker.list
+  copy: dest=/etc/apt/sources.list.d/docker.list src=docker.list
 
 - name: Install docker packages from docker repo
   become: yes
@@ -34,4 +34,8 @@
 
 - name: Install docker-compose pip module
   become: yes
-  pip: name=docker-compose state=latest
+  pip: name=docker-compose version=1.8.1
+
+- name: Temporary install docker-py 1.9 pip module (see https://github.com/ansible/ansible/issues/17495)
+  become: yes
+  pip: name=docker-py version=1.9.0

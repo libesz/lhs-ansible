@@ -11,7 +11,7 @@
 
 - name: Apply .vimrc
   become_user: "{{userName}}"
-  copy: dest=~/.vimrc src=./to_copy/.vimrc owner={{userName}} group={{userName}}
+  copy: dest=~/.vimrc src=.vimrc owner={{userName}} group={{userName}}
 
 - name: Change shell to zsh
   become: yes
