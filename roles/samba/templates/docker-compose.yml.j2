@@ -4,7 +4,11 @@ samba:
     # You must provide a Samba config file
     - ./smb.conf:/config/smb.conf
     # Shares
-    - {{downloadLocation}}:/share
+    - {{downloadLocation}}:/shares/downloads
+    - {{sambaWebShareLocation}}:/shares/web
+    - {{sambaUtilShareLocation}}:/shares/util
+    - {{sambaPicturesShareLocation}}:/shares/pictures
+    - {{sambaOtherShareLocation}}:/shares/other
   ports:
     - "137:137/udp"
     - "138:138/udp"

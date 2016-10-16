@@ -7,6 +7,17 @@
 - name: Create docker compose project
   template: src=docker-compose.yml.j2 dest=~/docker/samba/docker-compose.yml
 
+- name: Create share directory {{sambaWebShareLocation}}
+  file: path=~/docker/samba state=directory
+
+- name: Create samba share directories
+  action: file path={{item}} state=directory
+  with_items:
+    - "{{sambaWebShareLocation}}"
+    - "{{sambaUtilShareLocation}}"
+    - "{{sambaPicturesShareLocation}}"
+    - "{{sambaOtherShareLocation}}"
+
 - name: Create samba service
   docker_service:
     project_src: docker/samba
