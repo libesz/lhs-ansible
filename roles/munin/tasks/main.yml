@@ -1,0 +1,8 @@
+- name: Install munin
+  become: yes
+  apt: pkg=munin state=installed
+
+- name: Allow external server to connect {{muninEscapedExtServer}}
+  become: yes
+  notify: Restart munin-node
+  lineinfile: dest=/etc/munin/munin-node.conf line="allow ^{{muninEscapedExtServer}}$"
