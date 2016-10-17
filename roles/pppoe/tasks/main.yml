@@ -1,0 +1,27 @@
+- name: Install pppoe
+  become: yes
+  apt: pkg=pppoe state=installed
+
+- name: Configure pppoe plugin for WAN device {{pppoeWanNicName}}
+  become: yes
+  lineinfile: dest=/etc/ppp/peers/dsl-provider line="plugin rp-pppoe.so {{pppoeWanNicName}}"
+
+- name: Configure pppoe username {{pppoeUserName}}
+  become: yes
+  lineinfile: dest=/etc/ppp/peers/dsl-provider line="user \"{{pppoeUserName}}\""
+
+- name: Configure pppoe password in secret files
+  become: yes
+  action: lineinfile dest={{item}} line="\"{{pppoeUserName}}\" * \"{{pppoePassword}}\""
+  with_items:
+    - /etc/ppp/chap-secrets
+    - /etc/ppp/pap-secrets
+
+- name: Configure dsl-provider in the interfaces file
+  become: yes
+  template: src=dsl-provider.j2 dest=/etc/network/interfaces.d/dsl-provider
+
+- name: Call pon
+  become: yes
+  notify: Reload networking
+  command: pon dsl-provider
