@@ -6,3 +6,7 @@
 - name: Start router
   become: yes
   service: name=router state=restarted
+
+- name: Restart dnsmasq
+  become: yes
+  service: name=dnsmasq state=restarted

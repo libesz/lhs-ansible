@@ -2,9 +2,9 @@
   become: yes
   apt: pkg=pppoe state=installed
 
-- name: Configure pppoe plugin for WAN device {{pppoeWanNicName}}
+- name: Configure pppoe plugin for WAN device {{wanNicName}}
   become: yes
-  lineinfile: dest=/etc/ppp/peers/dsl-provider line="plugin rp-pppoe.so {{pppoeWanNicName}}"
+  lineinfile: dest=/etc/ppp/peers/dsl-provider line="plugin rp-pppoe.so {{wanRealNicName}}"
 
 - name: Configure pppoe username {{pppoeUserName}}
   become: yes
@@ -21,7 +21,14 @@
   become: yes
   template: src=dsl-provider.j2 dest=/etc/network/interfaces.d/dsl-provider
 
+- name: Configure manual wan interface
+  become: yes
+  action: lineinfile dest=/etc/network/interfaces line={{item}}
+  with_items:
+    - "auto {{wanRealNicName}}"
+    - "iface {{wanRealNicName}} inet manual"
+
 - name: Call pon
   become: yes
-  notify: Reload networking
+  #notify: Reload networking
   command: pon dsl-provider

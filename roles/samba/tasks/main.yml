@@ -11,8 +11,10 @@
   file: path=~/docker/samba state=directory
 
 - name: Create samba share directories
-  action: file path={{item}} state=directory
+  become: yes
+  action: file path={{item}} state=directory owner={{userName}}
   with_items:
+    - "{{downloadLocation}}"
     - "{{sambaWebShareLocation}}"
     - "{{sambaUtilShareLocation}}"
     - "{{sambaPicturesShareLocation}}"

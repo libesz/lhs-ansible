@@ -21,9 +21,9 @@ iptables -P OUTPUT ACCEPT
 iptables -P FORWARD DROP
 
 #Interfaces
-export LAN=lan0
+export LAN={{lanNicName}}
 #export WAN=eth0
-export WAN=ppp0
+export WAN={{wanNicName}}
 #export VPN=ppp1
 
 #detect WAN IP

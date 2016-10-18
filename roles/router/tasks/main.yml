@@ -1,11 +1,30 @@
+- name: Install dnsmasq
+  become: yes
+  apt: pkg=dnsmasq state=installed
+
+- name: Configure dnsmasq for dhcp
+  become: yes
+  notify: Restart dnsmasq
+  lineinfile: dest=/etc/dnsmasq.conf line="dhcp-range={{lanNicName}},192.168.1.20,192.168.1.98,72h"
+
 - name: Copy router script
   become: yes
-  copy: src=router.sh dest=/sbin/router.sh mode=0700 owner=root
+  template: src=router.sh.j2 dest=/sbin/router.sh mode=0700 owner=root
 
 - name: Copy router service file
   become: yes
   notify: Daemon reload
   copy: src=router.service dest=/etc/systemd/system/router.service owner=root
+
+- name: Configure lan interface with static address
+  become: yes
+  action: lineinfile dest=/etc/network/interfaces line={{item}}
+  with_items:
+    - "allow-hotplug {{lanNicName}}"
+    - "iface {{lanNicName}} inet static"
+    - "address 192.168.1.253"
+    - "broadcast 192.168.1.255"
+    - "netmask 255.255.255.0"
 
 - name: Enable router
   become: yes
