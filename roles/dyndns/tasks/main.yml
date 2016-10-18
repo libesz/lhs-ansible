@@ -1,0 +1,12 @@
+- name: Install wget
+  become: yes
+  apt: pkg=wget state=installed
+
+- name: Create script
+  become: yes
+  template: src=dnsupdate.sh.j2 dest={{dnsScriptPath}} mode=0755 owner=nobody
+
+- name: Create cron job
+  become: yes
+  #notify: Reload cron
+  template: src=cron_job.j2 dest=/etc/cron.d/dyndns
