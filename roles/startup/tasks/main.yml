@@ -1,0 +1,7 @@
+- name: Install cryptsetup
+  become: yes
+  apt: pkg=cryptsetup state=installed
+
+- name: Copy startup script
+  become: yes
+  copy: src=startup.sh dest=/sbin/startup.sh mode=0700 owner=root
