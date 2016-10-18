@@ -1,0 +1,10 @@
+[Unit]
+Description=Router
+
+[Service]
+Type=oneshot
+ExecStart=/sbin/router.sh
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target

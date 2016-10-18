@@ -1,0 +1,8 @@
+- name: Daemon reload
+  become: yes
+  notify: Start router
+  command: systemctl daemon-reload
+
+- name: Start router
+  become: yes
+  service: name=router state=restarted

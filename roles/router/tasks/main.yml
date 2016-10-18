@@ -1,0 +1,12 @@
+- name: Copy router script
+  become: yes
+  copy: src=router.sh dest=/sbin/router.sh mode=0700 owner=root
+
+- name: Copy router service file
+  become: yes
+  notify: Daemon reload
+  copy: src=router.service dest=/etc/systemd/system/router.service owner=root
+
+- name: Enable router
+  become: yes
+  service: name=router enabled=true
