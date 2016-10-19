@@ -2,6 +2,21 @@
   become: yes
   apt: pkg=cryptsetup state=installed
 
+- name: Create mount directories
+  become: yes
+  action: file path={{item}} state=directory
+  with_items:
+    - /mnt/raid1_1TB
+    - /mnt/noraid_2TB
+
 - name: Copy startup script
   become: yes
   copy: src=startup.sh dest=/sbin/startup.sh mode=0700 owner=root
+
+- name: Disable docker service
+  become: yes
+  service: name=docker.service enabled=no
+
+- name: Disable docker socket
+  become: yes
+  service: name=docker.socket enabled=no

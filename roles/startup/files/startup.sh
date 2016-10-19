@@ -15,7 +15,7 @@ if [ $? -ne 0 ]; then
    exit 1
 fi
 
-mount /dev/mapper/md1_open /home
+mount /dev/mapper/md1_open /mnt/raid1_1TB
 if [ $? -ne 0 ]; then
    exit 2
 fi
@@ -25,7 +25,7 @@ echo $PASS | cryptsetup luksOpen /dev/sda5 sda5_open
 if [ $? -ne 0 ]; then
    exit 1
 fi
-mount /dev/mapper/sda5_open /mnt/data
+mount /dev/mapper/sda5_open /mnt/noraid_2TB
 if [ $? -ne 0 ]; then
    exit 3
 fi

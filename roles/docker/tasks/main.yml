@@ -39,3 +39,11 @@
 - name: Temporary install docker-py 1.9 pip module (see https://github.com/ansible/ansible/issues/17495)
   become: yes
   pip: name=docker-py version=1.9.0
+
+- name: Start docker service
+  become: yes
+  service: name=docker.service state=started
+
+- name: Start docker socket
+  become: yes
+  service: name=docker.socket state=started
