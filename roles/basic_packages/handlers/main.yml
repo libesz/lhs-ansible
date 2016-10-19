@@ -1,6 +1,0 @@
-- name: Link zsh settings for root
-  become: yes
-  action: file src=/home/libesz/{{item}} dest=/root/{{item}} state=link
-  with_items:
-    - '.oh-my-zsh'
-    - '.zshrc'

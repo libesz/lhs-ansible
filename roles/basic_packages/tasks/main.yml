@@ -40,5 +40,11 @@
 - name: Get oh-my-zsh
   become_user: "{{userName}}"
   when: shellChanged|changed
-  notify: Link zsh settings for root
   shell: sh -c "$(wget https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)"
+
+- name: Link zsh settings for root
+  become: yes
+  action: file src=/home/libesz/{{item}} dest=/root/{{item}} state=link
+  with_items:
+    - '.oh-my-zsh'
+    - '.zshrc'

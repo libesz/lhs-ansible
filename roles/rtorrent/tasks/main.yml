@@ -1,4 +1,5 @@
 - name: Create downloads directory
+  become: yes
   file: path={{downloadLocation}} state=directory owner={{userName}}
 
 - name: Create password auth for webui
