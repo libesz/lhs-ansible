@@ -2,7 +2,7 @@
   file: path={{downloadLocation}} state=directory owner={{userName}}
 
 - name: Create password auth for webui
-  shell: echo "{{rtorrentUser}}:$(openssl passwd -crypt {{rtorrentPass}})" > {{downloadLocation}}.htpasswd
+  shell: echo "{{rtorrentUser}}:$(openssl passwd -crypt {{rtorrentPass}})" > {{downloadLocation}}/.htpasswd
 
 - name: Create rtorrent docker-compose directory
   file: path=~/docker/rtorrent state=directory

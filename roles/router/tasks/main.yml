@@ -5,26 +5,24 @@
 - name: Configure dnsmasq for dhcp
   become: yes
   notify: Restart dnsmasq
-  lineinfile: dest=/etc/dnsmasq.conf line="dhcp-range={{lanNicName}},192.168.1.20,192.168.1.98,72h"
+  template: src=dnsmasq.conf.j2 dest=/etc/dnsmasq.conf
 
-- name: Copy router script
+- name: Copy router/firewall script
   become: yes
   template: src=router.sh.j2 dest=/sbin/router.sh mode=0700 owner=root
 
-- name: Copy router service file
+- name: Copy router/firewall systemd service file
   become: yes
   notify: Daemon reload
   copy: src=router.service dest=/etc/systemd/system/router.service owner=root
 
+- name: Delete lan interface from the common interface file
+  become: yes
+  lineinfile: dest=/etc/network/interfaces state=absent regexp='{{lanNicName}}' backup=yes
+
 - name: Configure lan interface with static address
   become: yes
-  action: lineinfile dest=/etc/network/interfaces line={{item}}
-  with_items:
-    - "allow-hotplug {{lanNicName}}"
-    - "iface {{lanNicName}} inet static"
-    - "address 192.168.1.253"
-    - "broadcast 192.168.1.255"
-    - "netmask 255.255.255.0"
+  template: src=lan-interface.j2 dest=/etc/network/interfaces.d/{{lanNicName}}
 
 - name: Enable router
   become: yes
