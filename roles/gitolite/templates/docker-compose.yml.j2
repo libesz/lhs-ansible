@@ -3,7 +3,7 @@ gitolite:
   ports:
     - "2222:22"
   volumes:
-    - ~/repositories:/home/gitolite/repositories
+    - {{repoRootPath}}:/home/gitolite/repositories
   container_name: gitolite
   restart: always
   environment:
