@@ -14,6 +14,7 @@ The machine's configuration is now represented by ansible playbooks.
 - The first user supposed to have sudo and UID 1000 (shall be configurable in the future).
 - Suggested to correctly rename the semi-random network card names from like enp3s0 to lan0 and wan0 [with udev rules](http://www.cyberciti.biz/faq/howto-linux-rename-ethernet-devices-named-using-udev/).
 - Add static IP address for the LAN side (as this is the router, nobody will add an IP address on DHCP).
+- Upload ssh public key for the first user to let ansible in without password
 - Prepare the main playbook file by filling the missing variables.
 
 ### Enjoy
