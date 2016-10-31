@@ -7,5 +7,7 @@ minidlna:
   command: minidlnad -d
   volumes:
     - {{downloadLocation}}:/opt
+    - ./minidlna.conf:/etc/minidlna.conf
+    - ./cache:/var/cache/minidlna
   container_name: minidlna
   restart: always

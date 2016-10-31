@@ -1,6 +1,9 @@
 - name: Create minidlna docker-compose directory
   file: path=~/docker/minidlna state=directory
 
+- name: Create minidlna config
+  template: src=minidlna.conf.j2 dest=~/docker/minidlna/minidlna.conf
+
 - name: Create minidlna docker-compose yml
   template: src=docker-compose.yml.j2 dest=~/docker/minidlna/docker-compose.yml
 
