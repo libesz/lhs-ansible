@@ -1,0 +1,13 @@
+vlans:
+  '100':
+    vlanId: '100'
+    vlanSubnet: '1'
+  '200':
+    vlanId: '200'
+    vlanSubnet: '2'
+  '300':
+    vlanId: '300'
+    vlanSubnet: '3'
+  '400':
+    vlanId: '400'
+    vlanSubnet: '4'

@@ -59,8 +59,8 @@ iptables -A INPUT -p TCP -i ${LAN} -d 0/0 --dport 0:1023 -j ACCEPT
 iptables -A INPUT -p UDP -d 0/0 --dport 0:1023 -j DROP
 
 #Port forwarding
-iptables -t nat -A PREROUTING -i ${WAN} -p tcp --dport 23615 -j DNAT --to 192.168.1.11:23615
-iptables -t nat -A PREROUTING -i ${WAN} -p tcp --dport 60100:60199 -j DNAT --to 192.168.1.11
+# iptables -t nat -A PREROUTING -i ${WAN} -p tcp --dport 23615 -j DNAT --to 192.168.1.11:23615
+# iptables -t nat -A PREROUTING -i ${WAN} -p tcp --dport 60100:60199 -j DNAT --to 192.168.1.11
 
 #Finally we add the rules for NAT
 iptables -I FORWARD -i ${LAN} -d 192.168.1.0/255.255.255.0 -j DROP
@@ -76,7 +76,7 @@ iptables -t nat -A PREROUTING -i ${WAN} -p tcp --source 62.159.77.0/24 --dport 4
 iptables -t nat -A PREROUTING -i ${WAN} -p tcp --source 37.143.76.0/24 --dport 443 -j DNAT --to ${WANIP}:22
 
 #DNAT 22 to 433 only from BGF
-iptables -t nat -A PREROUTING -i ${WAN} -p tcp --source 193.225.67.0/24 --dport 443 -j DNAT --to ${WANIP}:22
+# iptables -t nat -A PREROUTING -i ${WAN} -p tcp --source 193.225.67.0/24 --dport 443 -j DNAT --to ${WANIP}:22
 
 #Tell the kernel that ip forwarding is OK
 echo 1 > /proc/sys/net/ipv4/ip_forward

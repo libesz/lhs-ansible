@@ -1,3 +1,20 @@
+- name: Configure static wan interface with static address
+  become: yes
+  template: src=wan-interface.j2 dest=/etc/network/interfaces.d/{{wanNicName}}
+
+- name: Delete lan interface from the common interface file
+  become: yes
+  lineinfile: dest=/etc/network/interfaces state=absent regexp='{{lanNicName}}' backup=yes
+
+- name: Configure lan interface with static address
+  become: yes
+  template: src=lan-interface.j2 dest=/etc/network/interfaces.d/{{lanNicName}}
+
+- name: Create VLAN interfaces
+  become: yes
+  template: src=vlan-interface.j2 dest=/etc/network/interfaces.d/vlan{{item.value.vlanId}}
+  with_dict: "{{vlans}}"
+
 - name: Install dnsmasq
   become: yes
   apt: pkg=dnsmasq state=installed
@@ -15,14 +32,6 @@
   become: yes
   notify: Daemon reload
   copy: src=router.service dest=/etc/systemd/system/router.service owner=root
-
-- name: Delete lan interface from the common interface file
-  become: yes
-  lineinfile: dest=/etc/network/interfaces state=absent regexp='{{lanNicName}}' backup=yes
-
-- name: Configure lan interface with static address
-  become: yes
-  template: src=lan-interface.j2 dest=/etc/network/interfaces.d/{{lanNicName}}
 
 - name: Enable router
   become: yes
