@@ -2,6 +2,10 @@
   become: yes
   file: path={{downloadLocation}} state=directory owner={{userName}}
 
+- name: Create downloads temp directory
+  become: yes
+  file: path={{downloadLocation}}_notready state=directory owner={{userName}}
+
 - name: Create password auth for webui
   shell: echo "{{rtorrentUser}}:$(openssl passwd -crypt {{rtorrentPass}})" > {{downloadLocation}}/.htpasswd
 
