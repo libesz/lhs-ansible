@@ -1,3 +1,0 @@
-- name: Reload networking
-  become: yes
-  service: name=networking state=reloaded
