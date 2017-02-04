@@ -16,5 +16,6 @@
   template: src=docker-compose.yml.j2 dest=~/docker/rtorrent/docker-compose.yml
 
 - name: Create rtorrent service
-  docker_service:
-    project_src: docker/rtorrent
+  command: docker-compose up -d
+  args:
+    chdir: docker/rtorrent

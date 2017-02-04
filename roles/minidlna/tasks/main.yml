@@ -7,6 +7,12 @@
 - name: Create minidlna docker-compose yml
   template: src=docker-compose.yml.j2 dest=~/docker/minidlna/docker-compose.yml
 
+- name: Increase inotify sysctl
+  become: yes
+  sysctl: name=fs.inotify.max_user_watches value=100000 sysctl_set=yes state=present reload=yes
+
 - name: Create minidlna service
-  docker_service:
-    project_src: docker/minidlna
+  command: docker-compose up -d
+  args:
+    chdir: docker/minidlna
+

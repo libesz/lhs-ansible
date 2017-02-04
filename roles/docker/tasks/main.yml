@@ -32,13 +32,8 @@
   when: userAddedToDockerGroup|changed
   failed_when: false
 
-- name: Install docker-compose pip module
-  become: yes
-  pip: name=docker-compose version=1.8.1
-
-- name: Temporary install docker-py 1.9 pip module (see https://github.com/ansible/ansible/issues/17495)
-  become: yes
-  pip: name=docker-py version=1.9.0
+- name: Install docker pip module
+  pip: name=docker
 
 - name: Start docker service
   become: yes

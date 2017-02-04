@@ -21,5 +21,7 @@
     - "{{sambaOtherShareLocation}}"
 
 - name: Create samba service
-  docker_service:
-    project_src: docker/samba
+  command: docker-compose up -d
+  args:
+    chdir: docker/samba
+

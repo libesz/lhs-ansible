@@ -9,5 +9,6 @@
   template: src=docker-compose.yml.j2 dest=~/docker/gitolite/docker-compose.yml
 
 - name: Create gitolite service
-  docker_service:
-    project_src: docker/gitolite
+  command: docker-compose up -d
+  args:
+    chdir: docker/gitolite
