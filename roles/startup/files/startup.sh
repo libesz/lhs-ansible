@@ -6,6 +6,8 @@ echo -ne 'nos? '
 read PASS
 stty $stty_orig
 
+#stop wtf md127
+mdadm --stop /dev/md127
 
 #NEW /home
 mdadm --assemble /dev/md1 /dev/sda2 /dev/sdb2
