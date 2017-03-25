@@ -59,6 +59,15 @@ iptables -A INPUT -p TCP -i ${LAN} -d 0/0 --dport 0:1023 -j ACCEPT
 iptables -A INPUT -p UDP -d 0/0 --dport 0:1023 -j DROP
 
 #Port forwarding
+{% for lanDevice in lanDevices %}
+{% if lanDevice.ip is defined %}
+{% if lanDevice.exposeTCP is defined %}
+{% for port in lanDevice.exposeTCP %}
+iptables -t nat -A PREROUTING -i ${WAN} -p tcp --dport {{port.from}} -j DNAT --to {{lanDevice.ip}}:{{port.to}}
+{% endfor %}
+{% endif %}
+{% endif %}
+{%endfor %}
 # iptables -t nat -A PREROUTING -i ${WAN} -p tcp --dport 23615 -j DNAT --to 192.168.1.11:23615
 # iptables -t nat -A PREROUTING -i ${WAN} -p tcp --dport 60100:60199 -j DNAT --to 192.168.1.11
 
