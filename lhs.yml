@@ -24,6 +24,9 @@
       sambaOtherShareLocation: <REPLACE_ME>
       sambaPicturesShareLocation: <REPLACE_ME>
     - minidlna
+    - role: nginx
+      fqdn: '<REPLACE ME>'
+      piLanIp: '<REPLACE ME>'
     - role: gitolite
       pubKeyForGitolite: "<REPLACE ME>"
       repoRootPath: "<REPLACE_ME>"

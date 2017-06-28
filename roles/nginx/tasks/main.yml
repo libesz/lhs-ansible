@@ -1,0 +1,22 @@
+- name: Create nginx docker-compose directory
+  file: path=~/docker/nginx state=directory
+
+- name: Copy nginx.conf
+  template: src=nginx.conf.j2 dest=~/docker/nginx/nginx.conf
+
+#- name: Create ssl directory
+#  file: path=~/docker/nginx/ssl state=directory
+
+#- name: Copy SSL key
+#  copy: src=key.key dest=~/docker/nginx/ssl/
+
+#- name: Copy SSL cert
+#  copy: src=cert.crt dest=~/docker/nginx/ssl/
+
+- name: Copy nginx docker-compose yml
+  template: src=docker-compose.yml.j2 dest=~/docker/nginx/docker-compose.yml
+
+- name: Create nginx service
+  command: docker-compose up -d
+  args:
+    chdir: docker/nginx
