@@ -50,9 +50,19 @@ http {
       # removing SSL (since OSPi isn't configured for it), and
       # adds information to the request that OPSi used to construct the correct links
       # in the OSPi application (i.e. https://mydomain/ospi/page.html instead of http://xxx.xxx.xxx.xxx:8080/page.html)
-      ### location /ospi/ {
-      location / {
+      location /ospi/ {
+      ### location / {
         proxy_pass http://{{piLanIp}}:80/; #internal network location of your OSPi
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header X-Scheme $scheme;
+        ### proxy_set_header X-Script-Name /ospi;
+        ### rewrite /ospi/(.*) /$1 break;
+      }
+      location /cam/ {
+      ### location / {
+        proxy_pass http://{{pi2LanIp}}:80/; #internal network location of your OSPi
         proxy_set_header Host $host;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;

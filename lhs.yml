@@ -27,6 +27,7 @@
     - role: nginx
       fqdn: '<REPLACE ME>'
       piLanIp: '<REPLACE ME>'
+      pi2LanIp: '<REPLACE_ME>'
     - role: gitolite
       pubKeyForGitolite: "<REPLACE ME>"
       repoRootPath: "<REPLACE_ME>"
