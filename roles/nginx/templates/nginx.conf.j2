@@ -29,7 +29,6 @@ http {
       listen 80;
       # server_name lhs.mooo.com;
       server_name {{fqdn}};
-      # root /var/www/nginx/;
       return 301 https://{{fqdn}}$request_uri;
       #return 301 https://lhs.mooo.com$request_uri;
     }
@@ -43,6 +42,7 @@ http {
       ssl_certificate   "/etc/nginx/ssl/cert.crt"; #replace mycert with actual filename
       ssl_certificate_key "/etc/nginx/ssl/key.key"; #replace mykey with actual filename
 
+      root /var/www/nginx/;
       #charset koi8-r;
       access_log  /var/log/nginx/access.log  main;
    
