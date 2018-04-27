@@ -35,6 +35,10 @@
 - name: Install docker pip module
   pip: name=docker
 
+- name: Copy docker daemon settings
+  become: yes
+  template: src=daemon.json.j2 dest=/etc/docker/daemon.json
+
 - name: Start docker service
   become: yes
   service: name=docker.service state=started
