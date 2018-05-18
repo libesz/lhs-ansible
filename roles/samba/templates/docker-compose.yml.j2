@@ -2,7 +2,7 @@ samba:
   image: joebiellik/samba-server
   volumes:
     # You must provide a Samba config file
-    - ./smb.conf:/config/smb.conf
+    - ./smb.conf:/etc/samba/smb.conf
     # Shares
     - {{downloadLocation}}:/shares/downloads
     - {{sambaWebShareLocation}}:/shares/web
@@ -10,10 +10,10 @@ samba:
     - {{sambaPicturesShareLocation}}:/shares/pictures
     - {{sambaOtherShareLocation}}:/shares/other
   ports:
-    - "137:137/udp"
-    - "138:138/udp"
-    - "139:139/tcp"
-    - "445:445/tcp"
+    - "192.168.1.254:137:137/udp"
+    - "192.168.1.254:138:138/udp"
+    - "192.168.1.254:139:139/tcp"
+    - "192.168.1.254:445:445/tcp"
   restart: always
   container_name: samba
   environment:
