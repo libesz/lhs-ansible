@@ -25,6 +25,7 @@ export WAN={{wanNicName}}
 #We lock our services so they only work from the LAN
 iptables -I INPUT 1 -i ${LAN} -j ACCEPT
 iptables -I INPUT 1 -i lo -j ACCEPT
+iptables -I INPUT 1 -i docker0 -j ACCEPT
 iptables -A INPUT -p UDP --dport bootps -i ${LAN} -j ACCEPT
 iptables -A INPUT -p UDP --dport domain -j REJECT
 iptables -A INPUT -p UDP --dport bootps -i ${LAN} -j ACCEPT
@@ -40,9 +41,7 @@ iptables -A INPUT -p TCP --dport http -i ${WAN} -j ACCEPT
 iptables -A INPUT -p TCP --dport https -i ${WAN} -j ACCEPT
 iptables -A INPUT -p TCP --dport 8000 -i ${WAN} -j ACCEPT
 iptables -A INPUT -m state --state ESTABLISHED,RELATED -i ${WAN} -j ACCEPT
-
-#After all, DROP everything else
-iptables -P INPUT DROP
+iptables -A INPUT -i ${WAN} -j DROP
 
 #Port forwarding
 {% for lanDevice in lanDevices %}

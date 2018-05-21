@@ -6,6 +6,7 @@ nginx:
   volumes:
     - /etc/letsencrypt/live/{{fqdn}}/cert.pem:/etc/nginx/ssl/cert.crt
     - /etc/letsencrypt/live/{{fqdn}}/privkey.pem:/etc/nginx/ssl/key.key
+    - /etc/letsencrypt/live/{{fqdn}}/fullchain.pem:/etc/nginx/ssl/fullchain.pem
     - ~/docker/nginx/webroot:/var/www/nginx/
     - ~/docker/nginx/nginx.conf:/etc/nginx/nginx.conf
     # - ~/temp:/var/www/nginx

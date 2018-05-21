@@ -1,0 +1,19 @@
+- name: Create nextcloud docker-compose directory
+  file: path=~/docker/nextcloud state=directory
+
+- name: Copy nextcloud nginx.conf file
+  copy: src=nginx.conf dest=~/docker/nextcloud/nginx.conf
+
+- name: Copy nextcloud redis.config.php file
+  copy: src=redis.config.php dest=~/docker/nextcloud/redis.config.php
+
+- name: Copy nextcloud db.env file
+  copy: src=db.env dest=~/docker/nextcloud/db.env
+
+- name: Copy nextcloud docker-compose yml
+  template: src=docker-compose.yml.j2 dest=~/docker/nextcloud/docker-compose.yml
+
+- name: Create nextcloud service
+  command: docker-compose up -d
+  args:
+    chdir: docker/nextcloud
