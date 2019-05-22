@@ -1,6 +1,6 @@
 - name: Install wget
   become: yes
-  apt: pkg=wget state=installed
+  apt: pkg=wget state=present
 
 - name: Create script
   become: yes

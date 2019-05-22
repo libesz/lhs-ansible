@@ -1,0 +1,22 @@
+
+- name: Install apcupsd daemon
+  become: yes
+  action: apt pkg=apcupsd state=present update_cache=true
+
+- name: Create APC udev rule
+  become: yes
+  template: src=20-ups.rules.j2 dest=/etc/udev/rules.d/20-ups.rules mode=0755 owner=root
+  register: udevRuleChanged
+
+- name: Ask udev to rename the ups device
+  become: yes
+  when: udevRuleChanged is changed
+  command: udevadm control --reload-rules && udevadm trigger
+
+- name: Create APC control script
+  become: yes
+  template: src=apccontrol.j2 dest=/etc/apcupsd/apccontrol mode=0755 owner=root
+
+- name: Start apcupsd service
+  become: yes
+  service: name=apcupsd.service state=started enabled=yes

@@ -8,6 +8,9 @@
   roles:
     - basic_packages
     - router
+    - role: apcups
+      apiPathBeginning: "https://xdroid.net/api/message?k=<REPLACE_ME>&t=<REPLACE_ME>&c="
+      upsSerial: "<REPLACE_ME>"
     - role: dyndns
       dnsScriptPath: /usr/bin/dnsupdate.sh
       dnsUpdateUrl: http://freedns.afraid.org/dynamic/update.php?<REPLACE_ME>

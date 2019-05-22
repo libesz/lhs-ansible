@@ -10,14 +10,14 @@
   become: yes
   template: src=lan-interface.j2 dest=/etc/network/interfaces.d/{{lanNicName}}
 
-- name: Create VLAN interfaces
-  become: yes
-  template: src=vlan-interface.j2 dest=/etc/network/interfaces.d/vlan{{item.value.vlanId}}
-  with_dict: "{{vlans}}"
+#- name: Create VLAN interfaces
+#  become: yes
+#  template: src=vlan-interface.j2 dest=/etc/network/interfaces.d/vlan{{item.value.vlanId}}
+#  with_dict: "{{vlans}}"
 
 - name: Install dnsmasq
   become: yes
-  apt: pkg=dnsmasq state=installed
+  apt: pkg=dnsmasq state=present
 
 - name: Configure dnsmasq for dhcp
   become: yes

@@ -19,4 +19,4 @@ The machine's configuration is now represented by ansible playbooks.
 
 ### Enjoy
 After well prepared, create an inventory file with the static IP address and push the state with ansible like:
-> ansible-playbook -v --ask-sudo-pass lhs.yml
+> ansible-playbook -v -become-method=sudo --ask-become-pass lhs.yml

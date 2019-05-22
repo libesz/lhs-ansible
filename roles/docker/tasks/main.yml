@@ -1,10 +1,9 @@
 - name: Install docker related packages from official repo
   become: yes
-  action: apt pkg={{item}} state=installed update_cache=true
-  with_items:
-   - apt-transport-https
-   - ca-certificates
-   - python-pip
+  apt:
+   pkg: ['apt-transport-https', 'ca-certificates', 'python-pip']
+   state: present
+   update_cache: true
 
 - name: Add key for docker apt repo
   become: yes
@@ -16,9 +15,7 @@
 
 - name: Install docker packages from docker repo
   become: yes
-  action: apt pkg={{item}} state=installed update_cache=true
-  with_items:
-   - docker-engine
+  apt: pkg='docker-engine' state=present update_cache=true
 
 - name: Add user to docker group
   become: yes
@@ -29,7 +26,7 @@
   shell: sleep 1; pkill -u {{userName}} sshd
   async: 3
   poll: 2
-  when: userAddedToDockerGroup|changed
+  when: userAddedToDockerGroup is changed
   failed_when: false
 
 - name: Install docker pip module

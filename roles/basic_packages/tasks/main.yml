@@ -1,13 +1,9 @@
 - name: Install basic backages
   become: yes
-  action: apt pkg={{item}} state=installed update_cache=true
-  with_items:
-    - vim
-    - htop
-    - aptitude
-    - mc
-    - git
-    - zsh
+  apt:
+    pkg: ['vim', 'htop', 'aptitude', 'mc', 'git', 'zsh']
+    state: present
+    update_cache: true
 
 - name: Apply .vimrc
   become_user: "{{userName}}"
@@ -34,12 +30,12 @@
   shell: sleep 1; pkill -u {{userName}} sshd
   async: 3
   poll: 2
-  when: shellChanged|changed
+  when: shellChanged is changed
   failed_when: false
 
 - name: Get oh-my-zsh
   become_user: "{{userName}}"
-  when: shellChanged|changed
+  when: shellChanged is changed
   shell: sh -c "$(wget https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)"
 
 - name: Link zsh settings for root

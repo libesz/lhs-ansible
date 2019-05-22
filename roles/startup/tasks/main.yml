@@ -1,6 +1,6 @@
 - name: Install cryptsetup
   become: yes
-  apt: pkg=cryptsetup state=installed
+  apt: pkg=cryptsetup state=present
 
 - name: Create mount directories
   become: yes

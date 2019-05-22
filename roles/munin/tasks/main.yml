@@ -1,6 +1,6 @@
 - name: Install munin
   become: yes
-  apt: pkg=munin state=installed
+  apt: pkg=munin state=present
 
 - name: Allow external server to connect {{muninEscapedExtServer}}
   become: yes
