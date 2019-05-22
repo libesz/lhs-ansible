@@ -4,6 +4,7 @@ The machine's configuration is now represented by ansible playbooks.
 ### Current roles:
 - PPPoE client.
 - Router with 2 NIC. Ports and WLAN is realized with a gigabit switch and an access point on the lan side.
+- APC UPS management with smart phone notification (i.e. with xdroid.net) forwarding
 - DLNA server with minidlna.
 - Rtorrent + webui for downloading stuff.
 - Samba for a regular NAS.
