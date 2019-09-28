@@ -1,13 +1,15 @@
 - name: Install docker related packages from official repo
   become: yes
   apt:
-   pkg: ['apt-transport-https', 'ca-certificates', 'python-pip']
+   pkg: ['apt-transport-https', 'ca-certificates', 'gnupg2', 'software-properties-common']
    state: present
    update_cache: true
 
-- name: Add key for docker apt repo
-  become: yes
-  apt_key: keyserver=hkp://p80.pool.sks-keyservers.net:80 id=58118E89F3A912897C070ADBF76221572C52609D
+- name: convert gpg
+  shell: "{{ item }}"
+  with_items:
+    - gpg --keyserver hkp://keys.gnupg.net --recv-keys 9DC858229FC7DD38854AE2D88D81803C0EBFCD88
+    - gpg -a --export 9DC858229FC7DD38854AE2D88D81803C0EBFCD88 | sudo apt-key add -
 
 - name: Add docker apt repo
   become: yes
@@ -15,7 +17,10 @@
 
 - name: Install docker packages from docker repo
   become: yes
-  apt: pkg='docker-engine' state=present update_cache=true
+  apt:
+    pkg: ['docker-ce', 'docker-ce-cli', 'containerd.io']
+    state: present
+    update_cache: true
 
 - name: Add user to docker group
   become: yes

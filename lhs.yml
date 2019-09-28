@@ -16,7 +16,8 @@
       dnsUpdateUrl: http://freedns.afraid.org/dynamic/update.php?<REPLACE_ME>
     - role: munin
       muninEscapedExtServer: <REPLACE ME>
-    - docker
+    - role: docker
+      dataRoot: <REPLACE ME>
     - startup
     - role: rtorrent
       rtorrentUser: <REPLACE_ME>
