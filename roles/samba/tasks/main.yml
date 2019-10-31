@@ -1,14 +1,14 @@
 - name: Create samba docker-compose directory
-  file: path=~/docker/samba state=directory
+  file: path=/home/{{userName}}/docker/samba state=directory
 
 - name: Copy samba config
-  copy: src=smb.conf dest=~/docker/samba/
+  copy: src=smb.conf dest=/home/{{userName}}/docker/samba/
 
 - name: Create docker compose project
-  template: src=docker-compose.yml.j2 dest=~/docker/samba/docker-compose.yml
+  template: src=docker-compose.yml.j2 dest=/home/{{userName}}/docker/samba/docker-compose.yml
 
 - name: Create share directory {{sambaWebShareLocation}}
-  file: path=~/docker/samba state=directory
+  file: path=/home/{{userName}}/docker/samba state=directory
 
 - name: Create samba share directories
   become: yes

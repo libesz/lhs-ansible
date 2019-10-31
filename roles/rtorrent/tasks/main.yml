@@ -10,12 +10,12 @@
   shell: echo "{{rtorrentUser}}:$(openssl passwd -crypt {{rtorrentPass}})" > {{downloadLocation}}/.htpasswd
 
 - name: Create rtorrent docker-compose directory
-  file: path=~/docker/rtorrent state=directory
+  file: path=/home/{{userName}}/docker/rtorrent state=directory
 
 - name: Create rtorrent docker-compose yml
-  template: src=docker-compose.yml.j2 dest=~/docker/rtorrent/docker-compose.yml
+  template: src=docker-compose.yml.j2 dest=/home/{{userName}}/docker/rtorrent/docker-compose.yml
 
 - name: Create rtorrent service
   command: docker-compose up -d
   args:
-    chdir: docker/rtorrent
+    chdir: /home/{{userName}}/docker/rtorrent

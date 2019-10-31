@@ -1,12 +1,12 @@
 - name: Create gitolite docker-compose directory
-  file: path=~/docker/gitolite state=directory
+  file: path=/home/{{userName}}/docker/gitolite state=directory
 
 - name: Create gitolite repo root directory
   become: yes
   file: path={{repoRootPath}} state=directory owner={{userName}}
 
 - name: Copy gitolite docker-compose yml
-  template: src=docker-compose.yml.j2 dest=~/docker/gitolite/docker-compose.yml
+  template: src=docker-compose.yml.j2 dest=/home/{{userName}}/docker/gitolite/docker-compose.yml
 
 - name: Create gitolite service
   command: docker-compose up -d

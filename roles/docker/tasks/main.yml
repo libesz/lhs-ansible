@@ -34,8 +34,9 @@
   when: userAddedToDockerGroup is changed
   failed_when: false
 
-- name: Install docker pip module
-  pip: name=docker
+- name: Install docker pip modules
+  pip: name=["docker", "docker-compose"]
+  become: yes
 
 - name: Copy docker daemon settings
   become: yes
@@ -48,3 +49,6 @@
 - name: Start docker socket
   become: yes
   service: name=docker.socket state=started
+
+- name: Create web backend network
+  shell: docker network create web
