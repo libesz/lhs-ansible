@@ -35,7 +35,10 @@
   failed_when: false
 
 - name: Install docker pip modules
-  pip: name=["docker", "docker-compose"]
+  pip:
+    name:
+    - docker
+    - docker-compose
   become: yes
 
 - name: Copy docker daemon settings
@@ -52,3 +55,4 @@
 
 - name: Create web backend network
   shell: docker network create web
+  ignore_errors: yes
