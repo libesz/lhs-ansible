@@ -1,10 +1,13 @@
-minidlna:
-  image: vimagick/minidlna
-  net: "host"
-  command: minidlnad -d
-  volumes:
-    - {{downloadLocation}}:/opt
-    - ./minidlna.conf:/etc/minidlna.conf
-    - ./cache:/var/cache/minidlna
-  container_name: minidlna
-  restart: always
+version: '3'
+
+services:
+  minidlna:
+    network_mode: host
+    image: vimagick/minidlna
+    command: minidlnad -d
+    volumes:
+      - {{downloadLocation}}:/opt
+      - ./minidlna.conf:/etc/minidlna.conf
+      - ./cache:/var/cache/minidlna
+    container_name: minidlna
+    restart: always

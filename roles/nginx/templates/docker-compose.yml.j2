@@ -1,14 +1,26 @@
-nginx:
-  image: nginx
-  ports:
-    - "80:80"
-    - "443:443"
-  volumes:
-    - /etc/letsencrypt/live/{{fqdn}}/cert.pem:/etc/nginx/ssl/cert.crt
-    - /etc/letsencrypt/live/{{fqdn}}/privkey.pem:/etc/nginx/ssl/key.key
-    - /etc/letsencrypt/live/{{fqdn}}/fullchain.pem:/etc/nginx/ssl/fullchain.pem
-    - /home/{{userName}}/docker/nginx/webroot:/var/www/nginx/
-    - /home/{{userName}}/docker/nginx/nginx.conf:/etc/nginx/nginx.conf
-    # - ~/temp:/var/www/nginx
-  container_name: nginx
-  restart: always
+version: '3'
+
+networks:
+  web:
+    external: true
+
+services:
+  nginx:
+    networks:
+      web: {}
+    external_links:
+    - rtorrent
+    - nextcloud
+    image: nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /etc/letsencrypt/live/{{fqdn}}/cert.pem:/etc/nginx/ssl/cert.crt
+      - /etc/letsencrypt/live/{{fqdn}}/privkey.pem:/etc/nginx/ssl/key.key
+      - /etc/letsencrypt/live/{{fqdn}}/fullchain.pem:/etc/nginx/ssl/fullchain.pem
+      - /home/{{userName}}/docker/nginx/webroot:/var/www/nginx/
+      - /home/{{userName}}/docker/nginx/nginx.conf:/etc/nginx/nginx.conf
+      # - ~/temp:/var/www/nginx
+    container_name: nginx
+    restart: always

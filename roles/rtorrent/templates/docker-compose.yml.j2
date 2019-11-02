@@ -1,13 +1,21 @@
-rtorrent:
-  image: diameter/rtorrent-rutorrent:stable
-  ports:
-    - "192.168.1.254:8080:80"
-    - "49160:49160/udp"
-    - "49161:49161"
-  volumes:
-    - {{downloadLocation}}_notready:/downloads_notready
-    - {{downloadLocation}}:/downloads
-  restart: always
-  container_name: rtorrent
-  environment:
-    PHP_MEM: 1024M
+version: '3'
+
+networks:
+  web:
+    external: true
+
+services:
+  rtorrent:
+    networks:
+      web: {}
+    image: diameter/rtorrent-rutorrent:stable
+    ports:
+      - "49160:49160/udp"
+      - "49161:49161"
+    volumes:
+      - {{downloadLocation}}_notready:/downloads_notready
+      - {{downloadLocation}}:/downloads
+    restart: always
+    container_name: rtorrent
+    environment:
+      PHP_MEM: 1024M
