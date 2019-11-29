@@ -5,11 +5,18 @@
     - downloadLocation: <REPLACE_ME>
     - lanNicName: lan0
     - wanNicName: wan0
+    - lanIP: <REPLACE_ME>
   roles:
     - basic_packages
-    - router
+    - role: router
+      lanDevices:
+        - name: <REPLACE_ME>
+          mac: <REPLACE_ME>
+          ip: <REPLACE_ME>
+          exposeTCP:
+            - from: <REPLACE_ME>
+              to: <REPLACE_ME>
     - role: apcups
-      apiPathBeginning: "https://xdroid.net/api/message?k=<REPLACE_ME>&t=<REPLACE_ME>&c="
       upsSerial: "<REPLACE_ME>"
     - role: dyndns
       dnsScriptPath: /usr/bin/dnsupdate.sh
@@ -17,7 +24,7 @@
     - role: munin
       muninEscapedExtServer: <REPLACE ME>
     - role: docker
-      dataRoot: <REPLACE ME>
+      dataRoot: <REPLACE_ME>
     - startup
     - role: rtorrent
       rtorrentUser: <REPLACE_ME>
@@ -28,6 +35,8 @@
       sambaOtherShareLocation: <REPLACE_ME>
       sambaPicturesShareLocation: <REPLACE_ME>
     - minidlna
+    - role: nextcloud
+      dbPassword: <REPLACE_ME>
     - role: nginx
       fqdn: '<REPLACE ME>'
       piLanIp: '<REPLACE ME>'

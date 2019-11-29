@@ -13,9 +13,9 @@
   when: udevRuleChanged is changed
   command: udevadm control --reload-rules && udevadm trigger
 
-- name: Create APC control script
-  become: yes
-  template: src=apccontrol.j2 dest=/etc/apcupsd/apccontrol mode=0755 owner=root
+#- name: Create APC control script
+#  become: yes
+#  template: src=apccontrol.j2 dest=/etc/apcupsd/apccontrol mode=0755 owner=root
 
 - name: Start apcupsd service
   become: yes
