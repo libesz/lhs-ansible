@@ -45,6 +45,14 @@
   become: yes
   template: src=daemon.json.j2 dest=/etc/docker/daemon.json
 
+- name: Add docker systemd drop-in
+  become: yes
+  copy: dest=/etc/systemd/system/docker.service.d/override.conf src=override.conf
+
+- name: Reload services
+  become: yes
+  systemd: daemon_reload=yes
+
 - name: Start docker service
   become: yes
   service: name=docker.service state=started
