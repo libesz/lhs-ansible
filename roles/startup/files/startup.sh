@@ -6,32 +6,28 @@ echo -ne 'nos? '
 read PASS
 stty $stty_orig
 
-#stop wtf md127
-mdadm --stop /dev/md127
-
-#NEW /home
-mdadm --assemble /dev/md1 /dev/sda2 /dev/sdb2
-
+#SSD
 echo $PASS | cryptsetup luksOpen /dev/md1 md1_open
 if [ $? -ne 0 ]; then
    exit 1
 fi
 
-mount /dev/mapper/md1_open /mnt/raid1_1TB
+mount /dev/mapper/md1_open /mnt/raid1_fast
 if [ $? -ne 0 ]; then
    exit 2
 fi
 
-#NEW /mnt/data
-echo $PASS | cryptsetup luksOpen /dev/sda5 sda5_open
+#HDD
+echo $PASS | cryptsetup luksOpen /dev/md2 md2_open
 if [ $? -ne 0 ]; then
    exit 1
 fi
-mount /dev/mapper/sda5_open /mnt/noraid_2TB
+mount /dev/mapper/md2_open /mnt/raid1_slow
 if [ $? -ne 0 ]; then
    exit 3
 fi
 
+#services
 systemctl start docker.socket
 if [ $? -ne 0 ]; then
    exit 4
