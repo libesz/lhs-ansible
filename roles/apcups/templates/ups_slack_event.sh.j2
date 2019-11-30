@@ -1,0 +1,79 @@
+#!/bin/bash
+
+SLACK_TOKEN={{slackToken}}
+SLACK_CHANNEL=home
+APP_ID=UPS
+
+case "$(basename $0)" in
+    killpower)
+	MESSAGE="Apccontrol doing: apcupsd --killpower on UPS ${1}"
+    ;;
+    commfailure)
+	MESSAGE="Warning communications lost with UPS ${1}"
+    ;;
+    commok)
+	MESSAGE="Communications restored with UPS ${1}"
+    ;;
+    powerout|onbattery)
+	MESSAGE="Power failure on UPS ${1}. Running on batteries."
+    ;;
+    offbattery)
+	MESSAGE="Power has returned on UPS ${1}..."
+	;;
+    mainsback)
+	if [ -f /etc/apcupsd/powerfail ] ; then
+	   MESSAGE="Continuing with shutdown."
+	fi
+    ;;
+    failing)
+	MESSAGE="Battery power exhausted on UPS ${1}. Doing shutdown."
+    ;;
+    timeout)
+	MESSAGE="Battery time limit exceeded on UPS ${1}. Doing shutdown."
+    ;;
+    loadlimit)
+	MESSAGE="Remaining battery charge below limit on UPS ${1}. Doing shutdown."
+    ;;
+    runlimit)
+	MESSAGE="Remaining battery runtime below limit on UPS ${1}. Doing shutdown."
+    ;;
+    doreboot)
+	MESSAGE="UPS ${1} initiating Reboot Sequence"
+    ;;
+    doshutdown)
+	MESSAGE="UPS ${1} initiated Shutdown Sequence"
+    ;;
+    annoyme)
+	MESSAGE="Power problems with UPS ${1}. Please logoff."
+    ;;
+    emergency)
+	MESSAGE="Emergency Shutdown. Possible battery failure on UPS ${1}."
+    ;;
+    changeme)
+	MESSAGE="Emergency! Batteries have failed on UPS ${1}. Change them NOW"
+    ;;
+    remotedown)
+	MESSAGE="Remote Shutdown. Beginning Shutdown Sequence."
+    ;;
+    startselftest)
+    MESSAGE="Self test started on UPS ${1}"
+    ;;
+    endselftest)
+    MESSAGE="Self test ended on UPS ${1}"
+    ;;
+    battdetach)
+    MESSAGE="Battery detached on UPS ${1}"
+    ;;
+    battattach)
+    MESSAGE="Battery attached on UPS ${1}"
+    ;;
+    *)
+    MESSAGE="Unknown action $0"
+    ;;
+esac
+
+exec docker run -ti --rm \
+-e SLACK_TOKEN="${SLACK_TOKEN}" \
+-e SLACK_CHANNEL="${SLACK_CHANNEL}" \
+-e APP_ID="${APP_ID}" \
+huszty/slack_writer "${MESSAGE}"

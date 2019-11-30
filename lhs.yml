@@ -18,6 +18,7 @@
               to: <REPLACE_ME>
     - role: apcups
       upsSerial: "<REPLACE_ME>"
+      slackToken: "<REPLACE_ME>"
     - role: dyndns
       dnsScriptPath: /usr/bin/dnsupdate.sh
       dnsUpdateUrl: http://freedns.afraid.org/dynamic/update.php?<REPLACE_ME>

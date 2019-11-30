@@ -13,9 +13,35 @@
   when: udevRuleChanged is changed
   command: udevadm control --reload-rules && udevadm trigger
 
-#- name: Create APC control script
-#  become: yes
-#  template: src=apccontrol.j2 dest=/etc/apcupsd/apccontrol mode=0755 owner=root
+- name: Create common APC script
+  become: yes
+  template: src=ups_slack_event.sh.j2 dest=/sbin/ups_slack_event.sh mode=0500 owner=root
+
+- name: Create symbolic links for UPS actions
+  become: yes
+  file:
+    src: "/sbin/ups_slack_event.sh"
+    dest: "/etc/apcupsd/{{item}}"
+    state: link
+    force: yes
+  with_items:
+  - "powerout"
+  - "onbattery"
+  - "offbattery"
+  - "failing"
+  - "timeout"
+  - "loadlimit"
+  - "runlimit"
+  - "doreboot"
+  - "doshutdown"
+  - "annoyme"
+  - "emergency"
+  - "changeme"
+  - "remotedown"
+  - "startselftest"
+  - "endselftest"
+  - "battdetach"
+  - "battattach"
 
 - name: Start apcupsd service
   become: yes
