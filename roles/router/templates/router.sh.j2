@@ -17,18 +17,28 @@ iptables -P INPUT ACCEPT
 iptables -P OUTPUT ACCEPT
 iptables -P FORWARD DROP
 
-#Interfaces
+#Main interfaces
 export LAN={{lanNicName}}
-#export WAN=eth0
 export WAN={{wanNicName}}
 
 #We lock our services so they only work from the LAN
 iptables -I INPUT 1 -i ${LAN} -j ACCEPT
 iptables -I INPUT 1 -i lo -j ACCEPT
 iptables -I INPUT 1 -i docker0 -j ACCEPT
-iptables -A INPUT -p UDP --dport bootps -i ${LAN} -j ACCEPT
-iptables -A INPUT -p UDP --dport domain -j REJECT
-iptables -A INPUT -p UDP --dport bootps -i ${LAN} -j ACCEPT
+
+{% for name, vlan in vlans.items() %}
+#Extra interface {{lanNicName}}.{{vlan.vlanId}}. Internet: {% if vlan.internetAllowed is defined and vlan.internetAllowed|bool %}YES{% else %}NO{% endif %}, intranet: {% if vlan.intranetAllowed is defined and vlan.intranetAllowed|bool %}YES{% else %}NO{% endif %}.
+{% if vlan.internetAllowed is defined and vlan.internetAllowed|bool %}
+{% if vlan.intranetAllowed is not defined or not vlan.intranetAllowed|bool %}
+iptables -A INPUT -p UDP --dport bootps -i {{lanNicName}}.{{vlan.vlanId}} -j ACCEPT
+iptables -A INPUT -p UDP --dport domain -i {{lanNicName}}.{{vlan.vlanId}} -j ACCEPT
+iptables -A INPUT -i {{lanNicName}}.{{vlan.vlanId}} -j REJECT
+{% endif %}
+{% elif vlan.intranetAllowed is defined and vlan.intranetAllowed|bool %}
+iptables -A INPUT -i {{lanNicName}}.{{vlan.vlanId}} -j ACCEPT
+{% endif %}
+{% endfor %}
+
 iptables -A INPUT -p UDP --dport domain -j REJECT
 
 #Allow access to our server from the WAN
@@ -52,12 +62,23 @@ iptables -t nat -A PREROUTING -i ${WAN} -p tcp --dport {{port.from}} -j DNAT --t
 {% endfor %}
 {% endif %}
 {% endif %}
-{%endfor %}
+{% endfor %}
 
-#Add the rules for NAT
+#Forward rules for main LAN
 iptables -I FORWARD -i ${LAN} -d 192.168.1.0/255.255.255.0 -j DROP
 iptables -A FORWARD -i ${LAN} -s 192.168.1.0/255.255.255.0 -j ACCEPT
 iptables -A FORWARD -i ${WAN} -d 192.168.1.0/255.255.255.0 -j ACCEPT
+
+{% for name, vlan in vlans.items() %}
+#Forward rules for extra interface: {{lanNicName}}.{{vlan.vlanId}}
+{% if vlan.internetAllowed is defined and vlan.internetAllowed|bool %}
+iptables -I FORWARD -i {{lanNicName}}.{{vlan.vlanId}} -d 192.168.{{vlan.vlanSubnet}}.0/255.255.255.0 -j DROP
+iptables -A FORWARD -i {{lanNicName}}.{{vlan.vlanId}} -s 192.168.{{vlan.vlanSubnet}}.0/255.255.255.0 -j ACCEPT
+iptables -A FORWARD -i ${WAN} -d 192.168.{{vlan.vlanSubnet}}.0/255.255.255.0 -j ACCEPT
+{% endif %}
+{% endfor %}
+
+#SNAT on WAN interface
 iptables -t nat -A POSTROUTING -o ${WAN} -j MASQUERADE
 
 #Tell the kernel that ip forwarding is OK

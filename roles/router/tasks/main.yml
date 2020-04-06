@@ -10,10 +10,15 @@
   become: yes
   template: src=lan-interface.j2 dest=/etc/network/interfaces.d/{{lanNicName}}
 
-#- name: Create VLAN interfaces
-#  become: yes
-#  template: src=vlan-interface.j2 dest=/etc/network/interfaces.d/vlan{{item.value.vlanId}}
-#  with_dict: "{{vlans}}"
+- name: Create VLAN interfaces
+  become: yes
+  template: src=vlan-interface.j2 dest=/etc/network/interfaces.d/{{lanNicName}}.{{item.value.vlanId}}
+  with_dict: "{{vlans}}"
+
+- name: Bring up VLAN interfaces
+  become: yes
+  command: ifup {{lanNicName}}.{{item.value.vlanId}}
+  with_dict: "{{vlans}}"
 
 - name: Install dnsmasq
   become: yes

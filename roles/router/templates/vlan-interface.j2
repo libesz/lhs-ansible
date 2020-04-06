@@ -1,4 +1,5 @@
 auto {{lanNicName}}.{{item.value.vlanId}}
 iface {{lanNicName}}.{{item.value.vlanId}} inet static
  address 192.168.{{item.value.vlanSubnet}}.254
+ broadcast 192.168.{{item.value.vlanSubnet}}.255
  netmask 255.255.255.0

@@ -1,5 +1,14 @@
-dhcp-range={{lanNicName}},192.168.1.20,192.168.1.98,72h
 interface={{lanNicName}}
+dhcp-range={{lanNicName}},192.168.1.20,192.168.1.98,72h
+
+{% for name, vlan in vlans.items() %}
+interface={{lanNicName}}.{{vlan.vlanId}}
+dhcp-range=set:{{lanNicName}}.{{vlan.vlanId}},192.168.{{vlan.vlanSubnet}}.20,192.168.{{vlan.vlanSubnet}}.98,72h
+{% if vlan.noPeerToPeer is defined and vlan.noPeerToPeer|bool %}
+dhcp-option=tag:{{lanNicName}}.{{vlan.vlanId}},option:netmask,255.255.255.255
+{% endif %}
+{% endfor %}
+
 {% for lanDevice in lanDevices %}
 dhcp-host={{lanDevice.mac}},{{lanDevice.ip}}
 {% endfor %}
